@@ -1,0 +1,35 @@
+image: node:latest
+
+stages:
+  - test
+  - deploy
+
+test: 
+  stage: test
+  environment:
+    name: testing
+  script:
+    - yarn install
+    - yarn lint --fix
+    # - yarn dev
+
+deploy-production:
+  stage: deploy
+  environment:
+    name: deploying
+    url: https://izisoft.io 
+  only:
+    - develop
+  before_script:
+    # Run ssh-agent in background:
+    - eval "$(ssh-agent -s)"
+    # Add SSH Key:
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
+    - ssh-add -l
+    # Install pm2:
+    - npm i -g pm2
+  script: 
+    - pm2 -v
+    # Run first time
+    # - pm2 deploy ecosystem.config.json production setup
+    - pm2 deploy ecosystem.config.json production
