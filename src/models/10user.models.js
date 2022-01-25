@@ -8,6 +8,7 @@ const { toJSON, paginate } = require('./plugins');
 
 const userSchema = mongoose.Schema(
   {
+    idNhoms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Nhom' }],
     idPartner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     idDanhSachHinhAnh: { type: mongoose.Schema.Types.ObjectId, ref: 'DanhSachHinhAnh' },
     idTinh: { type: mongoose.Schema.Types.ObjectId, ref: 'Tinh' },

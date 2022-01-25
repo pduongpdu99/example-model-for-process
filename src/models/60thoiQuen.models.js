@@ -7,6 +7,7 @@ const { toJSON, paginate } = require('./plugins');
 
 const thoiQuenSchema = mongoose.Schema(
   {
+    idNguoiDung: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     ten: {
       type: String,
       required: true,

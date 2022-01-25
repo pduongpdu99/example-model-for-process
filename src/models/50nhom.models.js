@@ -7,7 +7,6 @@ const { toJSON, paginate } = require('./plugins');
 
 const nhomSchema = mongoose.Schema(
   {
-    idThanhViens: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     ten: {
       type: String,
       required: true,
