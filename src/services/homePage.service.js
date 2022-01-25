@@ -1,5 +1,6 @@
 // const mongooes = require('mongoose');
 const { DiemTichLuy, DanhSachThoiQuen, ThoiQuenNhom, ThoiQuenPartner, ChiTietCongViec } = require('../models');
+const { userService } = require('./index');
 const { getPopulate } = require('../utils/common_methods/populate');
 // const { getPopulate } = require('../utils/common_methods/populate');
 
@@ -47,7 +48,7 @@ const ranking = async (filter, options) => {
     },
   ]);
 
-  let idUserNeedToFind = '61ead2a089ffe326ec525cc4';
+  let idUserNeedToFind = '61f008e2d949333bc0c2e961';
 
   return DanhSachThoiQuen.find({ idUser: idUserNeedToFind }).then(danhSach => {
     return ThoiQuenPartner.find({ idUser: idUserNeedToFind }).then(thoiQuenPartner => {
@@ -56,22 +57,25 @@ const ranking = async (filter, options) => {
         .populate(populateThoiQuenNhom.map(function (item) {
           return getPopulate(item.trim());
         })).then(results => {
-          console.log(results);
-          results = results.filter(thoiquennhom => thoiquennhom.idNhom.idThanhViens.includes(idUserNeedToFind));
-          results.concat(danhSach);
-          results.concat(thoiQuenPartner);
-          return {
-            diem,
-            thoiquen: results,
-            length: results.length
-          };
+          return userService.findById(idUserNeedToFind).then(userData => {
+            results = results.filter(thoiquennhom => {
+              return userData.idNhoms.includes(thoiquennhom.idNhom._id);
+            });
+
+            console.log(danhSach.map(item => item.idThoiQuen));
+            console.log(thoiQuenPartner.map(item => item.idThoiQuen));
+
+            results.concat(danhSach.map(item => item.idThoiQuen));
+            results.concat(thoiQuenPartner.map(item => item.idThoiQuen));
+            return {
+              diem,
+              thoiquen: results.map(item => item.idThoiQuen),
+              length: results.length
+            };
+          })
         })
     });
-  }).then(results => {
-    let thoiQuenList = results.thoiQuen.map(item => item.idThoiQuen);
-    thoiQuenList.map(item => ChiTietCongViec.find({idThoiQuen}))
-    
-  });
+  })
 
 
 

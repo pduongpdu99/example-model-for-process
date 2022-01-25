@@ -3,7 +3,6 @@ const { toJSON, paginate } = require('./plugins');
 
 const chiTietCongViecSchema = mongoose.Schema(
   {
-    idDanhSachThoiQuen: { type: String, trim: true },
     tienDo: { type: Number },
     nhiemVu: { type: Number },
     tongSoNgay: { type: Number },

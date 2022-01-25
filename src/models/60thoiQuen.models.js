@@ -25,8 +25,14 @@ const thoiQuenSchema = mongoose.Schema(
     donVi: {
       type: Number,
     },
-    ngay: [Date],
+    ngay: [Number],
     thoiGianNhacNhos: [String],
+    tienDo: { type: Number },
+    nhiemVu: { type: Number },
+    tongSoNgay: { type: Number },
+    soNgayLienTuc: { type: Number },
+    soNgayLienTucDaiNhat: { type: Number },
+
   },
   {
     timestamps: true,

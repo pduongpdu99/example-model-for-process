@@ -9,18 +9,15 @@ const huyenRoute = require('./30huyen.route');
 const diemTichLuyRoute = require('./40diemTichLuy.route');
 const nhomRoute = require('./50nhom.route');
 const thoiQuenRoute = require('./60thoiQuen.route');
-const danhSachThoiQuenRoute = require('./70danhSachThoiQuen.route');
-const thoiQuenPartnerRoute = require('./80thoiQuenPartner.route');
-const thoiQuenNhomRoute = require('./90thoiQuenNhom.route');
-const danhMucDeXuatRoute = require('./100danhMucDeXuat.route');
-const thoiQuenDanhMucRoute = require('./110thoiquendanhmuc.route');
-const chiTietCongViecRoute = require('./120chitietcongviec.route');
-const nhiemVuHoanThanhRoute = require('./130nhiemvuhoanthanh.route');
-const nhacChuongRoute = require('./140nhacchuong.route');
-const dnhSachHinhAnhRoute = require('./150danhsachhinhanh.route');
-const trichDanRoute = require('./160trichdan.route');
-const thongBaoRoute = require('./170thongbao.route');
-const thoiQuenMacDinhRoute = require('./180thoiQuenMacDinh.route');
+const danhMucDeXuatRoute = require('./70danhMucDeXuat.route');
+const thoiQuenDanhMucRoute = require('./80thoiquendanhmuc.route');
+const chiTietCongViecRoute = require('./90chitietcongviec.route');
+const nhiemVuHoanThanhRoute = require('./100nhiemvuhoanthanh.route');
+const nhacChuongRoute = require('./110nhacchuong.route');
+const dnhSachHinhAnhRoute = require('./120danhsachhinhanh.route');
+const trichDanRoute = require('./130trichdan.route');
+const thongBaoRoute = require('./140thongbao.route');
+const thoiQuenMacDinhRoute = require('./150thoiQuenMacDinh.route');
 const uploadRoute = require('./999999-upload.route');
 const homePageRoute = require('./homePage.route');
 
@@ -86,18 +83,6 @@ const defaultRoutes = [
   {
     path: '/thoiquens',
     route: thoiQuenRoute,
-  },
-  {
-    path: '/danhsachthoiquens',
-    route: danhSachThoiQuenRoute,
-  },
-  {
-    path: '/thoiquenpartners',
-    route: thoiQuenPartnerRoute,
-  },
-  {
-    path: '/thoiquennhoms',
-    route: thoiQuenNhomRoute,
   },
   {
     path: '/danhmucdexuats',
