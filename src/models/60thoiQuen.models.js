@@ -32,7 +32,6 @@ const thoiQuenSchema = mongoose.Schema(
     tongSoNgay: { type: Number },
     soNgayLienTuc: { type: Number },
     soNgayLienTucDaiNhat: { type: Number },
-
   },
   {
     timestamps: true,

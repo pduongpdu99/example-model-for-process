@@ -3,7 +3,7 @@ const { objectId } = require('./custom.validation');
 
 const create = {
   body: Joi.object().keys({
-    idUser: Joi.string().optional().required(),
+    idNguoiDung: Joi.string().optional().required(),
     ten: Joi.string().optional().required(),
     moTa: Joi.string().optional(),
     idNhacChuong: Joi.string().custom(objectId),
@@ -11,12 +11,17 @@ const create = {
     donVi: Joi.number().optional(),
     ngay: Joi.array().items(Joi.date()),
     thoiGianNhacNhos: Joi.array().items(Joi.string()),
+    tienDo: Joi.number().optional(),
+    nhiemVu: Joi.number().optional(),
+    tongSoNgay: Joi.number().optional(),
+    soNgayLienTuc: Joi.number().optional(),
+    soNgayLienTucDaiNhat: Joi.number().optional(),
   }),
 };
 
 const findByIdAndUpdate = {
   body: Joi.object().keys({
-    idUser: Joi.string().optional().required(),
+    idNguoiDung: Joi.string().optional().required(),
     ten: Joi.string().optional(),
     moTa: Joi.string().optional(),
     idNhacChuong: Joi.string().custom(objectId),
@@ -24,6 +29,11 @@ const findByIdAndUpdate = {
     donVi: Joi.number().optional(),
     ngay: Joi.array().items(Joi.date()),
     thoiGianNhacNhos: Joi.array().items(Joi.string()),
+    tienDo: Joi.number().optional(),
+    nhiemVu: Joi.number().optional(),
+    tongSoNgay: Joi.number().optional(),
+    soNgayLienTuc: Joi.number().optional(),
+    soNgayLienTucDaiNhat: Joi.number().optional(),
   }),
 };
 

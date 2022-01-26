@@ -3,7 +3,6 @@ const { objectId } = require('./custom.validation');
 
 const create = {
   body: Joi.object().keys({
-    idDanhSachThoiQuen: Joi.string().optional(),
     tienDo: Joi.number().optional(),
     nhiemVu: Joi.number().optional(),
     tongSoNgay: Joi.number().optional(),
@@ -15,7 +14,6 @@ const create = {
 const findByIdAndUpdate = {
   body: Joi.object().keys({
     id: Joi.string().custom(objectId).required(),
-    idDanhSachThoiQuen: Joi.string().optional(),
     tienDo: Joi.number().optional(),
     nhiemVu: Joi.number().optional(),
     tongSoNgay: Joi.number().optional(),
