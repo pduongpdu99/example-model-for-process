@@ -26,9 +26,12 @@ const thongKeCot = catchAsync(async (req, res) => {
   let idTaiKhoan = req.params.idTaiKhoan;
 
   // scope là argument alias cho ngày, tuần, tháng
-  // 1 - ngày
-  // 2 - tuần
-  // 3 - tháng
+  // 1 - load danh sách thói quen theo năm của tài khoản hiện tại
+  // 2 - load danh sách thói quen theo tháng của tài khoản hiện tại
+  // 3 - load danh sách thói quen các ngày của tài khoản hiện tại
+  // 4 - load danh sách thói quen các ngày trong tuần của tài khoản hiện tại.
+  // 5 - load danh sách thói quen hôm nay của tài khoản hiện tại.
+  // 6 - load danh sách thói quen tháng này của tài khoản hiện tại.
   let scope = req.params.scope;
 
   const result = await diemTichLuyService.thongKeCot(idTaiKhoan, scope);
@@ -36,12 +39,11 @@ const thongKeCot = catchAsync(async (req, res) => {
 });
 
 /**
- * thông kê theo ngày
+ * Liệt kê dữ liệu theo người dùng và ngày được chỉ định
  */
 const thongKeTheoNgay = catchAsync(async (req, res) => {
   let idTaiKhoan = req.params.idTaiKhoan;
   let date = new Date(req.params.timestamp).toISOString().split("T")[0];
-
 
   const result = await diemTichLuyService.thongKeTheoNgay(idTaiKhoan, date);
   res.send(result);

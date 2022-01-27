@@ -17,7 +17,7 @@ const find = async () => {
  * @returns
  */
 const thongKeCot = async (idTaiKhoan, scope) => {
-  let formats = ["%Y-%m", "%Y-%m-%d"];
+  let formats = ["%Y", "%Y-%m", "%Y-%m-%d", "%Y-%m-%d", "%Y-%m-%d", "%Y-%m"];
   let results = await DiemTichLuy.aggregate([
     {
       $group: {
@@ -34,15 +34,41 @@ const thongKeCot = async (idTaiKhoan, scope) => {
       return _idUser === idTaiKhoan;
     });
 
-    // xử lý load theo tuần
-    if (scope == 2) {
+    // xử lý load thói quen các ngày trong tuần hiện tại
+    if (scope == 4) {
+      // khởi tạo trường poluldate
+      let populate = ["thoiquens"];
+
       let current = new Date().toISOString().split("T")[0];
       let week = getWeekDuration(current);
       week = week.map(date => {
         let obj = dataFilterByTaiKhoan.find(item => item._id.date.toString() === date.toString());
-        return obj ? obj : null;
+        return obj ? obj : {};
       });
-      return week;
+      return ThoiQuen.populate(week, populate.map(item => getPopulate(item.trim())));
+    }
+
+    // xử lý load thói quen ngày hôm này
+    if (scope == 5) {
+      // khởi tạo trường poluldate
+      let populate = ["thoiquens"];
+
+      let current = new Date().toISOString().split("T")[0];
+      let obj = dataFilterByTaiKhoan.find(item => item._id.date.toString() === current.toString());
+
+      obj = obj ? obj : { "_id": { "user": idTaiKhoan, "date": current }, "total": 0, "thoiquens": [] };
+      return ThoiQuen.populate(obj, populate.map(item => getPopulate(item.trim())));
+    }
+
+    // xử lý load thói quen tháng hiện tại
+    if (scope == 6) {
+      // khởi tạo trường poluldate
+      let populate = ["thoiquens"];
+
+      let current = new Date().toISOString().split("T")[0].slice(0, 7).toString();
+      let obj = dataFilterByTaiKhoan.find(item => item._id.date.toString() === current.toString());
+      obj = obj ? obj : { "_id": { "user": idTaiKhoan, "date": current }, "total": 0, "thoiquens": [] };
+      return ThoiQuen.populate(obj, populate.map(item => getPopulate(item.trim())));
     }
 
     // load theo tháng;
