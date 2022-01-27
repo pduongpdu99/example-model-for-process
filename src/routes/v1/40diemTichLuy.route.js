@@ -14,6 +14,7 @@ router
 
 router.route('/paginate').get(auth(), diemTichLuyController.paginate);
 router.route('/history/:idThoiQuen').get(auth(), diemTichLuyController.loadLichSuThoiQuen);
+router.route('/diem/:idTinh/:month').get(auth(), diemTichLuyController.loadDiemNguoiDungTheoThang);
 router.route('/statistic/:idTaiKhoan/:scope').get(auth(), diemTichLuyController.thongKeCot);
 router.route('/statistic-day/:idTaiKhoan/:timestamp').get(auth(), diemTichLuyController.thongKeTheoNgay);
 

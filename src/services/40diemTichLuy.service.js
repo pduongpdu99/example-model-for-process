@@ -1,6 +1,6 @@
 /* eslint-disable */
 const httpStatus = require('http-status');
-const { DiemTichLuy, ThoiQuen } = require('../models');
+const { DiemTichLuy, ThoiQuen, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { sortObjects, getPopulate, getWeekDuration } = require('../utils/common_methods/common');
 
@@ -13,8 +13,10 @@ const find = async () => {
 };
 
 /**
- * thống kê cột
- * @returns
+ * Thống kê cột
+ * @param {*} idTaiKhoan 
+ * @param {*} scope 
+ * @returns 
  */
 const thongKeCot = async (idTaiKhoan, scope) => {
   let formats = ["%Y", "%Y-%m", "%Y-%m-%d", "%Y-%m-%d", "%Y-%m-%d", "%Y-%m"];
@@ -89,6 +91,50 @@ const thongKeTheoNgay = async (idTaiKhoan, date) => {
       '$gte': `${date}T00:00:00.000Z`,
       '$lt': `${date}T23:59:59.999Z`
     }
+  })
+};
+
+/**
+ * load tổng điểm người dùng theo tháng
+ * @returns
+ */
+const loadDiemNguoiDungTheoThang = async (idTinh, thang) => {
+  return User.find({ idTinh: idTinh }).then(users => {
+    let userids = users.map(user => user.id);
+    return DiemTichLuy.aggregate([
+      {
+        $group: {
+          _id: {
+            user: '$idUser',
+          },
+          dataset: {
+            $push: {
+              id: '$idThoiQuen',
+              month: { $dateToString: { format: "%m", date: "$createdAt", } },
+              diem: '$diem',
+            }
+          },
+        },
+      },
+    ]).then(results => {
+      results = results.filter(result => userids.find(item => item.toString() === result._id.user.toString()))
+      results = results.map(result => {
+        if (thang !== "0") {
+          thang = parseInt(thang);
+          result.dataset = result.dataset.filter(item => {
+            let month1 = item.month.toString();
+            let month2 = thang < 10 ? "0" + thang : thang.toString();
+            return month1 === month2;
+          });
+        }
+
+        result.sum = result.dataset.reduce(function (sum, current) {
+          return sum + current.diem;
+        }, 0);
+        return result;
+      });
+      return results;
+    })
   })
 };
 
@@ -198,30 +244,38 @@ const findById = async (id) => {
  */
 const paginate = async (filter, options) => {
   let populuteFields = [];
+
   // replace id -> _id
   if (filter.id) {
     filter._id = filter.id;
     delete filter.id;
   }
 
-  // convert to number
-  options.limit = parseInt(options.limit, 10);
-  options.page = parseInt(options.page, 10);
+  let limit = 10;
+  let page = 1;
 
-  return DiemTichLuy.find(filter).populate(populuteFields.map(item => {
+  // convert to number
+  if (options.limit && options) limit = parseInt(options.limit, 10);
+  if (options.page && options) page = parseInt(options.page, 10);
+
+  let results = await User.find(filter);
+  let length = results.length;
+  let totalResults = results.length;
+  let totalPages = (length / limit) - parseInt(length / limit) != 0 ? parseInt(length / limit) + 1 : parseInt(length / limit);
+  if (limit >= length) totalPages = 1;
+
+  return User.find(filter).populate(populuteFields.map(item => {
     return getPopulate(item.trim());
-  }))
-    .limit(options.limit)
-    .skip((options.page - 1) * options.limit)
+  })).limit(limit).skip((page - 1) * limit)
     .then(results => {
       return {
-        "results": results,
-        "page": options.page,
-        "limit": options.limit,
-        "totalPages": options.page + results.length % options.page === 0 ? 0 : 1,
-        "totalResults": results.length
+        results,
+        page,
+        limit,
+        totalPages,
+        totalResults
       }
-    }).catch(error => console.log(error))
+    });
 };
 
 module.exports = {
@@ -237,4 +291,5 @@ module.exports = {
   loadLichSuThoiQuen,
   thongKeCot,
   thongKeTheoNgay,
+  loadDiemNguoiDungTheoThang,
 };

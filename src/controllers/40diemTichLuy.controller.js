@@ -93,7 +93,7 @@ const findById = catchAsync(async (req, res) => {
  * paginate
  */
 const paginate = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['idDiemTichLuy', 'idRole', 'idOptionalRole', 'status', 'month', 'year']);
+  const filter = pick(req.query, ['idThoiQuen', 'diem', 'idUser']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
 
   // Query by month and year
@@ -117,6 +117,18 @@ const paginate = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+/**
+ * paginate
+ */
+const loadDiemNguoiDungTheoThang = catchAsync(async (req, res) => {
+  const idTinh = req.params.idTinh;
+  const month = req.params.month;
+
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const result = await diemTichLuyService.loadDiemNguoiDungTheoThang(idTinh, month, options);
+  res.send(result);
+});
+
 module.exports = {
   find,
   create,
@@ -130,4 +142,5 @@ module.exports = {
   loadLichSuThoiQuen,
   thongKeCot,
   thongKeTheoNgay,
+  loadDiemNguoiDungTheoThang
 };

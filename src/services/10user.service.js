@@ -29,7 +29,7 @@ const findUserByNumber = async (numberPhone) => {
  * @returns
  */
 const kichHoatTaiKhoan = async (idTaiKhoan, isActive) => {
-  return findByIdAndUpdate(idTaiKhoan.toString(), {activation: isActive});
+  return findByIdAndUpdate(idTaiKhoan.toString(), { activation: isActive });
 };
 
 /**
@@ -103,24 +103,31 @@ const paginate = async (filter, options) => {
     delete filter.id;
   }
 
+  let limit = 10;
+  let page = 1;
+
   // convert to number
-  options.limit = parseInt(options.limit, 10);
-  options.page = parseInt(options.page, 10);
+  if (options.limit && options) limit = parseInt(options.limit, 10);
+  if (options.page && options) page = parseInt(options.page, 10);
+
+  let results = await User.find(filter);
+  let length = results.length;
+  let totalResults = results.length;
+  let totalPages = (length / limit) - parseInt(length / limit) != 0 ? parseInt(length / limit) + 1 : parseInt(length / limit);
+  if (limit >= length) totalPages = 1;
 
   return User.find(filter).populate(populuteFields.map(item => {
     return getPopulate(item.trim());
-  }))
-    .limit(options.limit)
-    .skip((options.page - 1) * options.limit)
+  })).limit(limit).skip((page - 1) * limit)
     .then(results => {
       return {
-        "results": results,
-        "page": options.page,
-        "limit": options.limit,
-        "totalPages": options.page + results.length % options.page === 0 ? 0 : 1,
-        "totalResults": results.length
+        results,
+        page,
+        limit,
+        totalPages,
+        totalResults
       }
-    }).catch(error => console.log(error))
+    });
 };
 
 module.exports = {
