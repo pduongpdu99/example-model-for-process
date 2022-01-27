@@ -16,5 +16,6 @@ module.exports.dnhSachHinhAnhService = require('./120danhsachhinhanh.service');
 module.exports.trichDanService = require('./130trichdan.service');
 module.exports.thongBaoService = require('./140thongbao.service');
 module.exports.thoiQuenMacDinhService = require('./150thoiQuenMacDinh.service');
+module.exports.thoiQuenCoSanService = require('./160thoiQuenCoSan.service');
 module.exports.uploadService = require('./999999-upload.service');
 module.exports.homePageService = require('./homePage.service');

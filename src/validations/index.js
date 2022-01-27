@@ -14,3 +14,4 @@ module.exports.danhSachHinhAnhValidation = require('./120danhsachhinhanh.validat
 module.exports.trichDanValidation = require('./130trichdan.validation');
 module.exports.thongBaoValidation = require('./140thongbao.validation');
 module.exports.thoiQuenMacDinhValidation = require('./150thoiQuenMacDinh.validation');
+module.exports.thoiQuenCoSanValidation = require('./160thoiQuenCoSan.validation');

@@ -14,3 +14,4 @@ module.exports.DanhSachHinhAnh = require('./120danhsachhinhanh.models');
 module.exports.TrichDan = require('./130trichdan.models');
 module.exports.ThongBao = require('./140thongbao.models');
 module.exports.ThoiQuenMacDinh = require('./150thoiQuenMacDinh.models');
+module.exports.ThoiQuenCoSan = require('./160thoiquencosan.models');

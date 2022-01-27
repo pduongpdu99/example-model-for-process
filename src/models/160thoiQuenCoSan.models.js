@@ -5,23 +5,18 @@ const mongoose = require('mongoose');
 // const validator = require('validator');
 const { toJSON, paginate } = require('./plugins');
 
-const thoiQuenSchema = mongoose.Schema(
+const thoiQuenCoSanSchema = mongoose.Schema(
   {
     idDanhMucDeXuat: { type: mongoose.Schema.Types.ObjectId, ref: 'DanhMucDeXuat' },
     idNguoiDung: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     ten: { type: String, required: true, },
-    moTa: { type: String, },
-    idNhacChuong: { type: mongoose.SchemaTypes.ObjectId, ref: 'NhacChuong', },
-    donVi: { type: Number },
+    mota: { type: String, },
+    donVi: { type: mongoose.SchemaTypes.ObjectId, ref: 'NhacChuong', },
+    nhiemVu: { type: Number },
     ngay: [Number],
     thoiGianNhacNhos: [String],
-    tienDo: { type: Number },
-    nhiemVu: { type: Number },
     loaiThoiQuen: { type: Number },
-    hoanThanh: { type: Boolean },
-    tongSoNgay: { type: Number },
-    soNgayLienTuc: { type: Number },
-    soNgayLienTucDaiNhat: { type: Number },
+    nhiemVu: { type: Number },
   },
   {
     timestamps: true,
@@ -29,12 +24,12 @@ const thoiQuenSchema = mongoose.Schema(
 );
 
 // add plugin that converts mongoose to json
-thoiQuenSchema.plugin(toJSON);
-thoiQuenSchema.plugin(paginate);
+thoiQuenCoSanSchema.plugin(toJSON);
+thoiQuenCoSanSchema.plugin(paginate);
 
 /**
  * @typedef ThoiQuen
  */
-const ThoiQuen = mongoose.model('ThoiQuen', thoiQuenSchema);
+const ThoiQuen = mongoose.model('ThoiQuenCoSan', thoiQuenCoSanSchema);
 
 module.exports = ThoiQuen;

@@ -17,5 +17,6 @@ module.exports.danhSachHinhAnhController = require('./150danhsachhinhanh.control
 module.exports.trichDanController = require('./160trichdan.controller');
 module.exports.thongBaoController = require('./170thongbao.controller');
 module.exports.thoiQuenMacDinhController = require('./180thoiQuenMacDinh.controller');
+module.exports.thoiQuenCoSanController = require('./190thoiQuenCoSan.controller');
 module.exports.uploadController = require('./999999-upload.controller');
 module.exports.homePageController = require('./homePage.controller');
