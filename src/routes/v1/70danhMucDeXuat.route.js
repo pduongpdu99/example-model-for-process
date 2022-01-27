@@ -10,15 +10,16 @@ router
   .route('/')
   .get(auth(), danhMucDeXuatController.find)
   .post(auth(), danhMucDeXuatController.create)
-  .put(auth(), danhMucDeXuatController.updateDanhMucDeXuat);
+  .put(auth(), danhMucDeXuatController.updateThoiQuen);
 
 router.route('/paginate').get(auth(), danhMucDeXuatController.paginate);
+
 
 router
   .route('/:id')
   .get(auth(), danhMucDeXuatController.findById)
   // .put(auth(), validate(danhMucDeXuatValidation.updateDeviceToken), danhMucDeXuatController.updateDeviceToken)
-  .patch(auth(), validate(danhMucDeXuatValidation.findByIdAndUpdate), danhMucDeXuatController.updateDanhMucDeXuat)
+  .patch(auth(), validate(danhMucDeXuatValidation.findByIdAndUpdate), danhMucDeXuatController.updateThoiQuen)
   .delete(auth(), validate(danhMucDeXuatValidation.findByIdAndDelete), danhMucDeXuatController.findByIdAndDelete);
 
 module.exports = router;
