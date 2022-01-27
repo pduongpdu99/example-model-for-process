@@ -11,8 +11,39 @@ const find = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+/**
+ * load lịch sử thói quen
+ */
 const loadLichSuThoiQuen = catchAsync(async (req, res) => {
   const result = await diemTichLuyService.loadLichSuThoiQuen(req.params.idThoiQuen);
+  res.send(result);
+});
+
+/**
+ * thông kê cột
+ */
+const thongKeCot = catchAsync(async (req, res) => {
+  let idTaiKhoan = req.params.idTaiKhoan;
+
+  // scope là argument alias cho ngày, tuần, tháng
+  // 1 - ngày
+  // 2 - tuần
+  // 3 - tháng
+  let scope = req.params.scope;
+
+  const result = await diemTichLuyService.thongKeCot(idTaiKhoan, scope);
+  res.send(result);
+});
+
+/**
+ * thông kê theo ngày
+ */
+const thongKeTheoNgay = catchAsync(async (req, res) => {
+  let idTaiKhoan = req.params.idTaiKhoan;
+  let date = new Date(req.params.timestamp).toISOString().split("T")[0];
+
+
+  const result = await diemTichLuyService.thongKeTheoNgay(idTaiKhoan, date);
   res.send(result);
 });
 
@@ -95,4 +126,6 @@ module.exports = {
 
   // additional
   loadLichSuThoiQuen,
+  thongKeCot,
+  thongKeTheoNgay,
 };

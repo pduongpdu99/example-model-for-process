@@ -17,6 +17,7 @@ const create = {
     tongSoNgay: Joi.number().optional(),
     soNgayLienTuc: Joi.number().optional(),
     soNgayLienTucDaiNhat: Joi.number().optional(),
+    daTao: Joi.boolean().optional(),
   }),
 };
 
@@ -36,6 +37,7 @@ const findByIdAndUpdate = {
     tongSoNgay: Joi.number().optional(),
     soNgayLienTuc: Joi.number().optional(),
     soNgayLienTucDaiNhat: Joi.number().optional(),
+    daTao: Joi.boolean().optional(),
   }),
 };
 

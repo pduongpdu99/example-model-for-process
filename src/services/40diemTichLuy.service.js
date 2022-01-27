@@ -2,8 +2,7 @@
 const httpStatus = require('http-status');
 const { DiemTichLuy, ThoiQuen } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { getPopulate } = require('../utils/common_methods/populate');
-const { sortObjects } = require('../utils/common_methods/sort');
+const { sortObjects, getPopulate, getWeekDuration } = require('../utils/common_methods/common');
 
 /**
  * Find all diemTichLuy
@@ -11,6 +10,60 @@ const { sortObjects } = require('../utils/common_methods/sort');
  */
 const find = async () => {
   return DiemTichLuy.find();
+};
+
+/**
+ * thống kê cột
+ * @returns
+ */
+const thongKeCot = async (idTaiKhoan, scope) => {
+  let formats = ["%Y-%m", "%Y-%m-%d"];
+  let results = await DiemTichLuy.aggregate([
+    {
+      $group: {
+        _id: { user: '$idUser', date: { $dateToString: { format: formats[scope - 1], date: '$createdAt', }, }, },
+        total: { $sum: '$diem' },
+        thoiquens: { $addToSet: '$idThoiQuen' }
+      },
+    },
+  ]).then(results => {
+    // load dữ liệu theo người dùng
+    let dataFilterByTaiKhoan = results.filter(result => {
+      let _idUser = result._id.user.toString();
+      idTaiKhoan = idTaiKhoan.toString();
+      return _idUser === idTaiKhoan;
+    });
+
+    // xử lý load theo tuần
+    if (scope == 2) {
+      let current = new Date().toISOString().split("T")[0];
+      let week = getWeekDuration(current);
+      week = week.map(date => {
+        let obj = dataFilterByTaiKhoan.find(item => item._id.date.toString() === date.toString());
+        return obj ? obj : null;
+      });
+      return week;
+    }
+
+    // load theo tháng;
+    return dataFilterByTaiKhoan;
+  });
+
+  return results;
+};
+
+/**
+ * thống kê theo ngày
+ * @returns
+ */
+const thongKeTheoNgay = async (idTaiKhoan, date) => {
+  return DiemTichLuy.find({
+    idUser: idTaiKhoan.toString(),
+    createdAt: {
+      '$gte': `${date}T00:00:00.000Z`,
+      '$lt': `${date}T23:59:59.999Z`
+    }
+  })
 };
 
 /**
@@ -22,27 +75,9 @@ const loadLichSuThoiQuen = async (idThoiQuen) => {
   let results = await DiemTichLuy.aggregate([
     {
       $group: {
-        _id: {
-          thoiQuen: '$idThoiQuen',
-          time: {
-            $dateToString: {
-              format: '%Y-%m-%d',
-              date: '$createdAt',
-            },
-          },
-        },
+        _id: { thoiQuen: '$idThoiQuen', time: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt', }, }, },
         total: { $sum: '$diem' },
-        thoiquens: {
-          $push: {
-            idThoiQuen: '$idThoiQuen',
-            createAt: {
-              $dateToString: {
-                format: "%H:%M",
-                date: "$createdAt",
-              }
-            },
-          }
-        }
+        dates: { $push: { createdAt: { $dateToString: { format: "%H:%M", date: "$createdAt", } }, } }
       },
     },
   ]).then(results => {
@@ -59,15 +94,15 @@ const loadLichSuThoiQuen = async (idThoiQuen) => {
 
     // sort object list by keys
     let keys = ["hour", "min"];
-    dataFilterByDate.thoiquens = sortObjects(dataFilterByDate.thoiquens.map(item => {
-      let parts = item.createAt.split(":");
+    dataFilterByDate.dates = sortObjects(dataFilterByDate.dates.map(item => {
+      let parts = item.createdAt.split(":");
       item.hour = parseInt(parts[0]);
       item.min = parseInt(parts[1]);
       return item;
     }), keys);
 
     // delete keys
-    dataFilterByDate.thoiquens.map(item => keys.forEach(key => delete item[key]));
+    dataFilterByDate.dates.map(item => keys.forEach(key => delete item[key]));
 
     return ThoiQuen.populate(dataFilterByDate, thoiQuenPopulate.map(item => getPopulate(item.trim())));
   });
@@ -174,4 +209,6 @@ module.exports = {
 
   // additional
   loadLichSuThoiQuen,
+  thongKeCot,
+  thongKeTheoNgay,
 };
