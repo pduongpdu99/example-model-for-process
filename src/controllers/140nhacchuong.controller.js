@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const catchAsync = require('../utils/catchAsync');
+const { NhacChuong } = require('../models');
 const { nhacChuongService } = require('../services');
 
 /**
@@ -9,6 +10,19 @@ const { nhacChuongService } = require('../services');
 const find = catchAsync(async (req, res) => {
   const result = await nhacChuongService.find();
   res.send(result);
+});
+
+/**
+ * uploadFile
+ */
+const uploadFile = catchAsync(async (req, res) => {
+  if (req.file != undefined) {
+    req.body.baiNhac = req.file.filename;
+  }
+  console.log(req.body);
+
+  await NhacChuong.create(req.body);
+  res.status(200).send('success');
 });
 
 /**
@@ -62,4 +76,5 @@ module.exports = {
   findByIdAndDelete,
   findById,
   paginate,
+  uploadFile,
 };
