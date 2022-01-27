@@ -2,6 +2,19 @@ const express = require('express');
 const { nhacChuongController } = require('../../controllers');
 const { nhacChuongValidation } = require('../../validations');
 const auth = require('../../middlewares/auth');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'src/public/audio/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const router = express.Router();
 const validate = require('../../middlewares/validate');
@@ -9,7 +22,8 @@ const validate = require('../../middlewares/validate');
 router
   .route('/')
   .get(auth(), nhacChuongController.find)
-  .post(auth(), validate(nhacChuongValidation.create), nhacChuongController.create)
+  .post(auth(), upload.single('baiNhac'), nhacChuongController.uploadFile)
+  // .post(auth(), validate(nhacChuongValidation.create), nhacChuongController.create)
   .put(auth(), validate(nhacChuongValidation.findByIdAndUpdate), nhacChuongController.findByIdAndUpdate);
 
 router.route('/paginate').get(auth(), validate(nhacChuongController.paginate), nhacChuongController.paginate);

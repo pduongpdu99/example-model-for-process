@@ -15,3 +15,4 @@ module.exports.thongBaoService = require('./110thongbao.service');
 module.exports.thoiQuenCoSanService = require('./120thoiQuenCoSan.service');
 module.exports.uploadService = require('./999999-upload.service');
 module.exports.homePageService = require('./homePage.service');
+module.exports.checkStatusService = require('./checkStatus.service');

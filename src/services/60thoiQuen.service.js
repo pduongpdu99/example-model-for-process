@@ -17,18 +17,15 @@ const find = async () => {
  * @returns
  */
 const loadHabitsByTimestamp = async (datetime, options) => {
-  let datepart = datetime.split("T")[0];
+  let datepart = datetime.split('T')[0];
 
   let limit = 4;
   let page = 1;
 
   // convert to number
-  if (options && options.limit)
-    limit = parseInt(options.limit, 10);
+  if (options && options.limit) limit = parseInt(options.limit, 10);
 
-  if (options && options.page)
-    page = parseInt(options.page, 10);
-
+  if (options && options.page) page = parseInt(options.page, 10);
 
   // xử lý điểm bắt đầu và kết thúc để lấy từ dữ liệu
   // ví dụ từ 0 - 4: lấy các phần tử 0 1 2 3
@@ -47,19 +44,21 @@ const loadHabitsByTimestamp = async (datetime, options) => {
             },
           },
         },
-        thoiquens: { $addToSet: '$_id' }
+        thoiquens: { $addToSet: '$_id' },
+      },
+    },
+  ])
+    .then((results) => {
+      let data = results.filter((item) => item._id.time === datepart);
+      let result = {};
+      if (data.length > 0) {
+        result = data[0];
       }
-    }
-  ]).then(results => {
-    let data = results.filter(item => item._id.time === datepart);
-    let result = {};
-    if (data.length > 0) {
-      result = data[0];
-    }
 
-    result.thoiquens = result.thoiquens.slice(start, end)
-    return result;
-  }).catch(error => error);
+      result.thoiquens = result.thoiquens.slice(start, end);
+      return result;
+    })
+    .catch((error) => error);
 };
 
 /**
@@ -135,20 +134,24 @@ const paginate = async (filter, options) => {
   if (options && options.limit) options.limit = parseInt(options.limit, 10);
   if (options && options.page) options.page = parseInt(options.page, 10);
 
-  return ThoiQuen.find(filter).populate(populuteFields.map(item => {
-    return getPopulate(item.trim());
-  }))
+  return ThoiQuen.find(filter)
+    .populate(
+      populuteFields.map((item) => {
+        return getPopulate(item.trim());
+      })
+    )
     .limit(options.limit)
     .skip((options.page - 1) * options.limit)
-    .then(results => {
+    .then((results) => {
       return {
-        "results": results,
-        "page": options.page,
-        "limit": options.limit,
-        "totalPages": options.page + results.length % options.page === 0 ? 0 : 1,
-        "totalResults": results.length
-      }
-    }).catch(error => console.log(error))
+        results: results,
+        page: options.page,
+        limit: options.limit,
+        totalPages: options.page + (results.length % options.page) === 0 ? 0 : 1,
+        totalResults: results.length,
+      };
+    })
+    .catch((error) => console.log(error));
 };
 
 module.exports = {

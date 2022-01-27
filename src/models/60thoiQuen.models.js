@@ -8,10 +8,10 @@ const { toJSON, paginate } = require('./plugins');
 const thoiQuenSchema = mongoose.Schema(
   {
     idDanhMucDeXuat: { type: mongoose.Schema.Types.ObjectId, ref: 'DanhMucDeXuat' },
-    idNguoiDung: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    ten: { type: String, required: true, },
-    moTa: { type: String, },
-    idNhacChuong: { type: mongoose.SchemaTypes.ObjectId, ref: 'NhacChuong', },
+    idNguoiDung: { type: mongoose.SchemaTypes.ObjectId, ref: 'User' },
+    ten: { type: String, required: true },
+    moTa: { type: String },
+    idNhacChuong: { type: mongoose.SchemaTypes.ObjectId, ref: 'NhacChuong' },
     donVi: { type: Number },
     ngay: [Number],
     thoiGianNhacNhos: [String],
@@ -22,7 +22,7 @@ const thoiQuenSchema = mongoose.Schema(
     tongSoNgay: { type: Number },
     soNgayLienTuc: { type: Number },
     soNgayLienTucDaiNhat: { type: Number },
-    daTao: { type: Boolean, default: false},
+    daTao: { type: Boolean, default: false },
   },
   {
     timestamps: true,

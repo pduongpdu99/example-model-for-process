@@ -4,6 +4,7 @@ const { toJSON, paginate } = require('./plugins');
 const nhacChuongSchema = mongoose.Schema(
   {
     ten: { type: String, trim: true },
+    theLoai: { type: String, trim: true },
     baiNhac: { type: String, trim: true },
   },
   {

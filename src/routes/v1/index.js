@@ -17,6 +17,7 @@ const thongBaoRoute = require('./110thongbao.route');
 const thoiQuenMacDinhRoute = require('./120thoiQuenMacDinh.route');
 const uploadRoute = require('./999999-upload.route');
 const homePageRoute = require('./homePage.route');
+const checkStatusRoute = require('./checkStatus.route');
 
 const router = express.Router();
 
@@ -88,6 +89,10 @@ const defaultRoutes = [
   {
     path: '/homepages',
     route: homePageRoute,
+  },
+  {
+    path: '/checkstatus',
+    route: checkStatusRoute,
   },
 
   { path: '/uploads', route: uploadRoute },

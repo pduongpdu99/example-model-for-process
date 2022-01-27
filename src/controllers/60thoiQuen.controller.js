@@ -17,8 +17,8 @@ const find = catchAsync(async (req, res) => {
 const loadHabitsByTimestamp = catchAsync(async (req, res) => {
   const timestamp = req.params.timestamp;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  
-  let datetime = (new Date(parseInt(timestamp.toString()))).toISOString();
+
+  let datetime = new Date(parseInt(timestamp.toString())).toISOString();
 
   const result = await thoiQuenService.loadHabitsByTimestamp(datetime, options);
   res.send(result);
