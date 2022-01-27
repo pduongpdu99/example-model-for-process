@@ -17,7 +17,6 @@ router.route('/paginate').get(auth(), thoiQuenController.paginate);
 // load thói quen theo ngày
 router.route('/:timestamp').get(auth(), thoiQuenController.loadHabitsByTimestamp);
 
-
 router
   .route('/:id')
   .get(auth(), thoiQuenController.findById)

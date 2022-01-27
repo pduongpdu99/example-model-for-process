@@ -19,3 +19,4 @@ module.exports.thoiQuenMacDinhService = require('./150thoiQuenMacDinh.service');
 module.exports.thoiQuenCoSanService = require('./160thoiQuenCoSan.service');
 module.exports.uploadService = require('./999999-upload.service');
 module.exports.homePageService = require('./homePage.service');
+module.exports.checkStatusService = require('./checkStatus.service');

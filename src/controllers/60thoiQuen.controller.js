@@ -11,14 +11,23 @@ function toIsoString(date) {
       return (norm < 10 ? '0' : '') + norm;
     };
 
-  return date.getFullYear() +
-    '-' + pad(date.getMonth() + 1) +
-    '-' + pad(date.getDate()) +
-    'T' + pad(date.getHours()) +
-    ':' + pad(date.getMinutes()) +
-    ':' + pad(date.getSeconds()) +
-    dif + pad(tzo / 60) +
-    ':' + pad(tzo % 60);
+  return (
+    date.getFullYear() +
+    '-' +
+    pad(date.getMonth() + 1) +
+    '-' +
+    pad(date.getDate()) +
+    'T' +
+    pad(date.getHours()) +
+    ':' +
+    pad(date.getMinutes()) +
+    ':' +
+    pad(date.getSeconds()) +
+    dif +
+    pad(tzo / 60) +
+    ':' +
+    pad(tzo % 60)
+  );
 }
 
 /**
@@ -35,8 +44,8 @@ const find = catchAsync(async (req, res) => {
 const loadHabitsByTimestamp = catchAsync(async (req, res) => {
   const timestamp = req.params.timestamp;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  
-  let datetime = (new Date(parseInt(timestamp.toString()))).toISOString();
+
+  let datetime = new Date(parseInt(timestamp.toString())).toISOString();
 
   const result = await thoiQuenService.loadHabitsByTimestamp(datetime, options);
   res.send(result);

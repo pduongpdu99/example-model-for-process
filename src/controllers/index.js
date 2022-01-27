@@ -20,3 +20,4 @@ module.exports.thoiQuenMacDinhController = require('./180thoiQuenMacDinh.control
 module.exports.thoiQuenCoSanController = require('./190thoiQuenCoSan.controller');
 module.exports.uploadController = require('./999999-upload.controller');
 module.exports.homePageController = require('./homePage.controller');
+module.exports.checkStatusController = require('./checkStatus.controller');
