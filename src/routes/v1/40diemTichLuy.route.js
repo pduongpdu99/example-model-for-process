@@ -13,6 +13,7 @@ router
   .put(auth(), diemTichLuyController.updateDiemTichLuy);
 
 router.route('/paginate').get(auth(), diemTichLuyController.paginate);
+router.route('/history/:idThoiQuen').get(auth(), diemTichLuyController.loadLichSuThoiQuen);
 
 router
   .route('/:id')

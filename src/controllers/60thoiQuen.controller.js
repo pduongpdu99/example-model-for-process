@@ -3,11 +3,42 @@ const pick = require('../utils/pick');
 const catchAsync = require('../utils/catchAsync');
 const { thoiQuenService } = require('../services');
 
+function toIsoString(date) {
+  var tzo = -date.getTimezoneOffset(),
+    dif = tzo >= 0 ? '+' : '-',
+    pad = function (num) {
+      var norm = Math.floor(Math.abs(num));
+      return (norm < 10 ? '0' : '') + norm;
+    };
+
+  return date.getFullYear() +
+    '-' + pad(date.getMonth() + 1) +
+    '-' + pad(date.getDate()) +
+    'T' + pad(date.getHours()) +
+    ':' + pad(date.getMinutes()) +
+    ':' + pad(date.getSeconds()) +
+    dif + pad(tzo / 60) +
+    ':' + pad(tzo % 60);
+}
+
 /**
  * find
  */
 const find = catchAsync(async (req, res) => {
   const result = await thoiQuenService.find();
+  res.send(result);
+});
+
+/**
+ * load thói quen theo ngày
+ */
+const loadHabitsByTimestamp = catchAsync(async (req, res) => {
+  const timestamp = req.params.timestamp;
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  
+  let datetime = (new Date(parseInt(timestamp.toString()))).toISOString();
+
+  const result = await thoiQuenService.loadHabitsByTimestamp(datetime, options);
   res.send(result);
 });
 
@@ -87,4 +118,5 @@ module.exports = {
   findByIdAndDelete,
   findById,
   paginate,
+  loadHabitsByTimestamp,
 };

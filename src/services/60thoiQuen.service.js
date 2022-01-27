@@ -1,6 +1,6 @@
 /* eslint-disable */
 const httpStatus = require('http-status');
-const { ThoiQuen } = require('../models');
+const { ThoiQuen, DiemTichLuy } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { getPopulate } = require('../utils/common_methods/populate');
 
@@ -10,6 +10,56 @@ const { getPopulate } = require('../utils/common_methods/populate');
  */
 const find = async () => {
   return ThoiQuen.find();
+};
+
+/**
+ * load thói quen theo ngày
+ * @returns
+ */
+const loadHabitsByTimestamp = async (datetime, options) => {
+  let datepart = datetime.split("T")[0];
+
+  let limit = 4;
+  let page = 1;
+
+  // convert to number
+  if (options && options.limit)
+    limit = parseInt(options.limit, 10);
+
+  if (options && options.page)
+    page = parseInt(options.page, 10);
+
+
+  // xử lý điểm bắt đầu và kết thúc để lấy từ dữ liệu
+  // ví dụ từ 0 - 4: lấy các phần tử 0 1 2 3
+  // ví dụ từ 1 - 5: lấy các phần tử 1 2 3 4
+  let start = (page - 1) * limit;
+  let end = start + limit;
+
+  return ThoiQuen.aggregate([
+    {
+      $group: {
+        _id: {
+          time: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$createdAt',
+            },
+          },
+        },
+        thoiquens: { $addToSet: '$_id' }
+      }
+    }
+  ]).then(results => {
+    let data = results.filter(item => item._id.time === datepart);
+    let result = {};
+    if (data.length > 0) {
+      result = data[0];
+    }
+
+    result.thoiquens = result.thoiquens.slice(start, end)
+    return result;
+  }).catch(error => error);
 };
 
 /**
@@ -82,8 +132,8 @@ const paginate = async (filter, options) => {
   }
 
   // convert to number
-  options.limit = parseInt(options.limit, 10);
-  options.page = parseInt(options.page, 10);
+  if (options && options.limit) options.limit = parseInt(options.limit, 10);
+  if (options && options.page) options.page = parseInt(options.page, 10);
 
   return ThoiQuen.find(filter).populate(populuteFields.map(item => {
     return getPopulate(item.trim());
@@ -109,4 +159,5 @@ module.exports = {
   findById,
   paginate,
   updateThoiQuenById,
+  loadHabitsByTimestamp,
 };

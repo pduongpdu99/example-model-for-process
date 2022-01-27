@@ -11,6 +11,11 @@ const find = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const loadLichSuThoiQuen = catchAsync(async (req, res) => {
+  const result = await diemTichLuyService.loadLichSuThoiQuen(req.params.idThoiQuen);
+  res.send(result);
+});
+
 /**
  * create
  */
@@ -87,4 +92,7 @@ module.exports = {
   findByIdAndDelete,
   findById,
   paginate,
+
+  // additional
+  loadLichSuThoiQuen,
 };

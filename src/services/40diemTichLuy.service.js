@@ -1,8 +1,9 @@
 /* eslint-disable */
 const httpStatus = require('http-status');
-const { DiemTichLuy } = require('../models');
+const { DiemTichLuy, ThoiQuen } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { getPopulate } = require('../utils/common_methods/populate');
+const { sortObjects } = require('../utils/common_methods/sort');
 
 /**
  * Find all diemTichLuy
@@ -10,6 +11,68 @@ const { getPopulate } = require('../utils/common_methods/populate');
  */
 const find = async () => {
   return DiemTichLuy.find();
+};
+
+/**
+ * dựa vào điểm tích lũy để tạo lịch sử
+ * @returns
+ */
+const loadLichSuThoiQuen = async (idThoiQuen) => {
+  let thoiQuenPopulate = ['_id.thoiQuen', 'thoiquens.idThoiQuen'];
+  let results = await DiemTichLuy.aggregate([
+    {
+      $group: {
+        _id: {
+          thoiQuen: '$idThoiQuen',
+          time: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$createdAt',
+            },
+          },
+        },
+        total: { $sum: '$diem' },
+        thoiquens: {
+          $push: {
+            idThoiQuen: '$idThoiQuen',
+            createAt: {
+              $dateToString: {
+                format: "%H:%M",
+                date: "$createdAt",
+              }
+            },
+          }
+        }
+      },
+    },
+  ]).then(results => {
+    let dataFilterByDate = results.filter(result => {
+      let _idThoiQuen = result._id.thoiQuen.toString();
+      idThoiQuen = idThoiQuen.toString();
+      return _idThoiQuen === idThoiQuen;
+    });
+
+    // get only once data object by id
+    if (dataFilterByDate.length > 0) {
+      dataFilterByDate = dataFilterByDate[0];
+    }
+
+    // sort object list by keys
+    let keys = ["hour", "min"];
+    dataFilterByDate.thoiquens = sortObjects(dataFilterByDate.thoiquens.map(item => {
+      let parts = item.createAt.split(":");
+      item.hour = parseInt(parts[0]);
+      item.min = parseInt(parts[1]);
+      return item;
+    }), keys);
+
+    // delete keys
+    dataFilterByDate.thoiquens.map(item => keys.forEach(key => delete item[key]));
+
+
+    return ThoiQuen.populate(dataFilterByDate, thoiQuenPopulate.map(item => getPopulate(item.trim())));
+  });
+  return results;
 };
 
 /**
@@ -109,4 +172,7 @@ module.exports = {
   findById,
   paginate,
   updateDiemTichLuyById,
+
+  // additional
+  loadLichSuThoiQuen,
 };
