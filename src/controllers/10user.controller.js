@@ -13,11 +13,24 @@ const find = catchAsync(async (req, res) => {
 });
 
 /**
- * find with tree view
+ * Kích hoạt tài khoản
+ * @returns
  */
-const findWithTreeView = catchAsync(async (req, res) => {
-  const result = await userService.findWithTreeView(req.params.root);
+const kichHoatTaiKhoan = catchAsync(async (req, res) => {
+  let idTaiKhoan = req.params.idTaiKhoan.toString();
+  let isActive = req.params.active.toString() === 'true';
+
+  const result = await userService.kichHoatTaiKhoan(idTaiKhoan, isActive);
   res.send(result);
+});
+
+/**
+ * Tìm kiếm người dùng theo số điện thoại
+ */
+const findUserByNumber = catchAsync(async (req, res) => {
+  let number = req.params.number;
+  const account = await userService.findUserByNumber(number);
+  res.send(account);
 });
 
 /**
@@ -220,5 +233,8 @@ module.exports = {
   getUsernameValid,
   findInforSubordinateTeams,
   findStatisticsOfUser,
-  findWithTreeView,
+
+  // additional
+  findUserByNumber,
+  kichHoatTaiKhoan,
 };

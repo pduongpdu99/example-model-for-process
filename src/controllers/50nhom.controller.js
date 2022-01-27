@@ -20,6 +20,20 @@ const create = catchAsync(async (req, res) => {
 });
 
 /**
+ * thêm thành viên vào nhóm
+ * @param idNhom id nhóm 
+ * @param idThanhVien id thành viên
+ * @returns 
+ */
+const themThanhVienVaoNhom = catchAsync(async (req, res) => {
+  let idNhom = req.params.idNhom;
+  let idNguoiDung = req.params.idNguoiDung;
+
+  let nhom = await nhomService.themThanhVienVaoNhom(idNhom, idNguoiDung);
+  res.send(nhom);
+});
+
+/**
  * Update Nhom
  */
 const updateNhom = catchAsync(async (req, res) => {
@@ -87,4 +101,7 @@ module.exports = {
   findByIdAndDelete,
   findById,
   paginate,
+
+  // additional
+  themThanhVienVaoNhom,
 };

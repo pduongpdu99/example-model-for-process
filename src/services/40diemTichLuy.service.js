@@ -69,7 +69,6 @@ const loadLichSuThoiQuen = async (idThoiQuen) => {
     // delete keys
     dataFilterByDate.thoiquens.map(item => keys.forEach(key => delete item[key]));
 
-
     return ThoiQuen.populate(dataFilterByDate, thoiQuenPopulate.map(item => getPopulate(item.trim())));
   });
   return results;

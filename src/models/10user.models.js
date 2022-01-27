@@ -53,6 +53,10 @@ const userSchema = mongoose.Schema(
     token: {
       type: String,
     },
+    activation: {
+      type: Boolean,
+      default: false
+    },
   },
   {
     timestamps: true,

@@ -1,6 +1,6 @@
 /* eslint-disable */
 const httpStatus = require('http-status');
-const { User, Order, Menu, RoleDetail } = require('../models');
+const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { getPopulate } = require('../utils/common_methods/populate');
 /**
@@ -9,6 +9,27 @@ const { getPopulate } = require('../utils/common_methods/populate');
  */
 const find = async () => {
   return User.find();
+};
+
+/**
+ * Tìm kiếm người dùng theo số điện thoại
+ * @returns
+ */
+const findUserByNumber = async (numberPhone) => {
+  return User.find({ soDienThoai: numberPhone.toString() }).then(results => {
+    if (results.length > 0) {
+      return results[0];
+    }
+    return {};
+  });
+};
+
+/**
+ * Kích hoạt tài khoản
+ * @returns
+ */
+const kichHoatTaiKhoan = async (idTaiKhoan, isActive) => {
+  return findByIdAndUpdate(idTaiKhoan.toString(), {activation: isActive});
 };
 
 /**
@@ -75,7 +96,7 @@ const paginate = async (filter, options) => {
     'banBes idTinh',
     'banBes idHuyen',
   ];
-  
+
   // replace id -> _id
   if (filter.id) {
     filter._id = filter.id;
@@ -110,4 +131,8 @@ module.exports = {
   findByIdAndDelete,
   findById,
   paginate,
+
+  // additional
+  findUserByNumber,
+  kichHoatTaiKhoan,
 };

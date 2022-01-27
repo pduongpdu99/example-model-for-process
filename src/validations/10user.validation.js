@@ -20,6 +20,7 @@ const create = {
     banBes: Joi.string().optional(),
     hinhNen: Joi.string().optional(),
     token: Joi.string().optional(),
+    activation: Joi.boolean().optional(),
   }),
 };
 
@@ -43,6 +44,7 @@ const findByIdAndUpdate = {
     banBes: Joi.string().optional(),
     hinhNen: Joi.string().optional(),
     token: Joi.string().optional(),
+    activation: Joi.boolean().optional(),
   }),
 };
 

@@ -20,6 +20,10 @@ router.route('/gen').get(auth(), validate(userValidation.getUsernameValid), user
 
 router.route('/count').get(auth(), userControler.getCountUsername);
 
+router.route('/number/:number').get(auth(), userControler.findUserByNumber);
+
+router.route('/active/:idTaiKhoan/:active').put(auth(), userControler.kichHoatTaiKhoan);
+
 router
   .route('/dateStart-dateEnd')
   .get(auth(), validate(userValidation.findByDateStartToDateEnd), userControler.findByDateStartToDateEnd);
@@ -33,8 +37,6 @@ router
   .get(auth(), validate(userValidation.findInforSubordinateTeams), userControler.findInforSubordinateTeams);
 
 router.route('/statis').get(auth(), validate(userValidation.findStatisticsOfUser), userControler.findStatisticsOfUser);
-
-router.route('/tree-view/:root').get(auth(), userControler.findWithTreeView);
 
 router
   .route('/:id')

@@ -1,6 +1,6 @@
 /* eslint-disable */
 const httpStatus = require('http-status');
-const { Nhom } = require('../models');
+const { Nhom, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { getPopulate } = require('../utils/common_methods/populate');
 
@@ -19,6 +19,23 @@ const find = async () => {
  */
 const create = async (body) => {
   return Nhom.create(body);
+};
+
+/**
+ * thêm thanh niên vô nhó
+ * @param {*} body
+ * @returns
+ */
+const themThanhVienVaoNhom = async (idNhom, idNguoiDung) => {
+  return User.findById(idNguoiDung.toString()).then(user => {
+    let nhomsOfUser = user.idNhoms.map(item => item.toString());
+    console.log(user, nhomsOfUser);
+    if (!nhomsOfUser.includes(idNhom.toString())) {
+      user.idNhoms.push(idNhom);
+    }
+
+    return User.updateOne({ _id: idNguoiDung, idNhoms: user.idNhoms }).then(user => user).catch(error => error);
+  });
 };
 
 /**
@@ -109,4 +126,7 @@ module.exports = {
   findById,
   paginate,
   updateNhomById,
+
+  // additional
+  themThanhVienVaoNhom,
 };
