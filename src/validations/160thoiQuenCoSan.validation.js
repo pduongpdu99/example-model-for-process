@@ -3,37 +3,30 @@ const { objectId } = require('./custom.validation');
 
 const create = {
   body: Joi.object().keys({
+    idDanhMucDeXuat: Joi.string().optional(),
     idNguoiDung: Joi.string().optional().required(),
     ten: Joi.string().optional().required(),
     moTa: Joi.string().optional(),
-    idNhacChuong: Joi.string().custom(objectId),
-    soLuong: Joi.number().optional(),
     donVi: Joi.number().optional(),
     ngay: Joi.array().items(Joi.date()),
     thoiGianNhacNhos: Joi.array().items(Joi.string()),
-    tienDo: Joi.number().optional(),
     nhiemVu: Joi.number().optional(),
-    tongSoNgay: Joi.number().optional(),
-    soNgayLienTuc: Joi.number().optional(),
-    soNgayLienTucDaiNhat: Joi.number().optional(),
+    loaiThoiQuen: Joi.number().optional(),
   }),
 };
 
 const findByIdAndUpdate = {
   body: Joi.object().keys({
+    id: Joi.string().required(),
+    idDanhMucDeXuat: Joi.string().optional(),
     idNguoiDung: Joi.string().optional().required(),
-    ten: Joi.string().optional(),
+    ten: Joi.string().optional().required(),
     moTa: Joi.string().optional(),
-    idNhacChuong: Joi.string().custom(objectId),
-    soLuong: Joi.number().optional(),
     donVi: Joi.number().optional(),
     ngay: Joi.array().items(Joi.date()),
     thoiGianNhacNhos: Joi.array().items(Joi.string()),
-    tienDo: Joi.number().optional(),
     nhiemVu: Joi.number().optional(),
-    tongSoNgay: Joi.number().optional(),
-    soNgayLienTuc: Joi.number().optional(),
-    soNgayLienTucDaiNhat: Joi.number().optional(),
+    loaiThoiQuen: Joi.number().optional(),
   }),
 };
 

@@ -16,7 +16,6 @@ const thoiQuenCoSanSchema = mongoose.Schema(
     ngay: [Number],
     thoiGianNhacNhos: [String],
     loaiThoiQuen: { type: Number },
-    nhiemVu: { type: Number },
   },
   {
     timestamps: true,

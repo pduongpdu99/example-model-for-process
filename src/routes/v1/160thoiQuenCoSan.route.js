@@ -1,8 +1,8 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const { thoiQuenValidation } = require('../../validations');
-const { thoiQuenController } = require('../../controllers');
+const { thoiQuenCoSanValidation } = require('../../validations');
+const { thoiQuenCoSanController } = require('../../controllers');
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router
   .route('/:id')
   .get(auth(), thoiQuenController.findById)
   // .put(auth(), validate(thoiQuenValidation.updateDeviceToken), thoiQuenController.updateDeviceToken)
-  .patch(auth(), validate(thoiQuenValidation.findByIdAndUpdate), thoiQuenController.updateThoiQuen)
-  .delete(auth(), validate(thoiQuenValidation.findByIdAndDelete), thoiQuenController.findByIdAndDelete);
+  .patch(auth(), validate(thoiQuenCoSanValidation.findByIdAndUpdate), thoiQuenCoSanController.updateThoiQuen)
+  .delete(auth(), validate(thoiQuenCoSanValidation.findByIdAndDelete), thoiQuenCoSanController.findByIdAndDelete);
 
 module.exports = router;
