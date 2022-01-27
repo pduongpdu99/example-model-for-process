@@ -39,7 +39,7 @@ const loadHabitsByTimestamp = async (datetime, options) => {
         _id: {
           time: {
             $dateToString: {
-              format: '%Y-%m-%d',
+              format: '%Y-%m',
               date: '$createdAt',
             },
           },
@@ -49,11 +49,52 @@ const loadHabitsByTimestamp = async (datetime, options) => {
     },
   ])
     .then((results) => {
-      let data = results.filter((item) => item._id.time === datepart);
+      let data = results.filter((item) => item._id.time.toString() === datepart.slice(0, 7).toString());
       let result = {};
       if (data.length > 0) {
         result = data[0];
       }
+
+      result.thoiquens = result.thoiquens.slice(start, end);
+      return result;
+    })
+    .catch((error) => error);
+};
+
+/**
+ * load thói quen theo ngày
+ * @returns
+ */
+const loadHabitsByidNguoiDung = async (idNguoiDung, options) => {
+
+  let limit = 4;
+  let page = 1;
+
+  // convert to number
+  if (options && options.limit) limit = parseInt(options.limit, 10);
+
+  if (options && options.page) page = parseInt(options.page, 10);
+
+  // xử lý điểm bắt đầu và kết thúc để lấy từ dữ liệu
+  // ví dụ từ 0 - 4: lấy các phần tử 0 1 2 3
+  // ví dụ từ 1 - 5: lấy các phần tử 1 2 3 4
+  let start = (page - 1) * limit;
+  let end = start + limit;
+
+  return ThoiQuen.aggregate([
+    {
+      $group: {
+        _id: {
+          nguoiDung: "$idNguoiDung",
+        },
+        thoiquens: { $addToSet: '$_id' },
+      },
+    },
+  ])
+    .then((results) => {
+      let data = results.find((item) => item._id.nguoiDung.toString() === idNguoiDung.toString());
+      let result = {};
+      if (data) result = data;
 
       result.thoiquens = result.thoiquens.slice(start, end);
       return result;
@@ -162,5 +203,7 @@ module.exports = {
   findById,
   paginate,
   updateThoiQuenById,
+
+  loadHabitsByidNguoiDung,
   loadHabitsByTimestamp,
 };

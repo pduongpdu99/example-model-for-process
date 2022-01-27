@@ -25,6 +25,17 @@ const loadHabitsByTimestamp = catchAsync(async (req, res) => {
 });
 
 /**
+ * load thói quen theo người dùng
+ */
+const loadHabitsByidNguoiDung = catchAsync(async (req, res) => {
+  const idNguoiDung = req.params.idNguoiDung;
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+
+  const result = await thoiQuenService.loadHabitsByidNguoiDung(idNguoiDung, options);
+  res.send(result);
+});
+
+/**
  * create
  */
 const create = catchAsync(async (req, res) => {
@@ -101,4 +112,5 @@ module.exports = {
   findById,
   paginate,
   loadHabitsByTimestamp,
+  loadHabitsByidNguoiDung,
 };

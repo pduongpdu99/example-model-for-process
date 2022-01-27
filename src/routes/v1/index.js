@@ -14,7 +14,7 @@ const dnhSachHinhAnhRoute = require('./80danhsachhinhanh.route');
 const nhacChuongRoute = require('./90nhacchuong.route');
 const trichDanRoute = require('./100trichdan.route');
 const thongBaoRoute = require('./110thongbao.route');
-const thoiQuenMacDinhRoute = require('./120thoiQuenMacDinh.route');
+const thoiQuenCoSanRoute = require('./120thoiQuenCoSan.route');
 const uploadRoute = require('./999999-upload.route');
 const homePageRoute = require('./homePage.route');
 const checkStatusRoute = require('./checkStatus.route');
@@ -29,18 +29,6 @@ const defaultRoutes = [
   {
     path: '/users',
     route: userRoute,
-  },
-  {
-    path: '/thoiquendanhmucs',
-    route: thoiQuenDanhMucRoute,
-  },
-  {
-    path: '/chitietcongviecs',
-    route: chiTietCongViecRoute,
-  },
-  {
-    path: '/nhiemvuhoanthanhs',
-    route: nhiemVuHoanThanhRoute,
   },
   {
     path: '/nhacchuongs',
@@ -59,8 +47,8 @@ const defaultRoutes = [
     route: thongBaoRoute,
   },
   {
-    path: '/thoiquenmacdinhs',
-    route: thoiQuenMacDinhRoute,
+    path: '/thoiquenCoSans',
+    route: thoiQuenCoSanRoute,
   },
   {
     path: '/tinhs',

@@ -10,7 +10,7 @@ router
   .route('/')
   .get(auth(), danhMucDeXuatController.find)
   .post(auth(), danhMucDeXuatController.create)
-  .put(auth(), danhMucDeXuatController.updateThoiQuen);
+  .put(auth(), danhMucDeXuatController.updateDanhMucDeXuat);
 
 router.route('/paginate').get(auth(), danhMucDeXuatController.paginate);
 
@@ -19,7 +19,7 @@ router
   .route('/:id')
   .get(auth(), danhMucDeXuatController.findById)
   // .put(auth(), validate(danhMucDeXuatValidation.updateDeviceToken), danhMucDeXuatController.updateDeviceToken)
-  .patch(auth(), validate(danhMucDeXuatValidation.findByIdAndUpdate), danhMucDeXuatController.updateThoiQuen)
+  .patch(auth(), validate(danhMucDeXuatValidation.findByIdAndUpdate), danhMucDeXuatController.updateDanhMucDeXuat)
   .delete(auth(), validate(danhMucDeXuatValidation.findByIdAndDelete), danhMucDeXuatController.findByIdAndDelete);
 
 module.exports = router;

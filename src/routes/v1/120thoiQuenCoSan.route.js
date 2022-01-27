@@ -8,16 +8,16 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(auth(), thoiQuenController.find)
-  .post(auth(), thoiQuenController.create)
-  .put(auth(), thoiQuenController.updateThoiQuen);
+  .get(auth(), thoiQuenCoSanController.find)
+  .post(auth(), thoiQuenCoSanController.create)
+  .put(auth(), thoiQuenCoSanController.updateThoiQuen);
 
-router.route('/paginate').get(auth(), thoiQuenController.paginate);
+router.route('/paginate').get(auth(), thoiQuenCoSanController.paginate);
 
 router
   .route('/:id')
-  .get(auth(), thoiQuenController.findById)
-  // .put(auth(), validate(thoiQuenValidation.updateDeviceToken), thoiQuenController.updateDeviceToken)
+  .get(auth(), thoiQuenCoSanController.findById)
+  // .put(auth(), validate(thoiQuenValidation.updateDeviceToken), thoiQuenCoSanController.updateDeviceToken)
   .patch(auth(), validate(thoiQuenCoSanValidation.findByIdAndUpdate), thoiQuenCoSanController.updateThoiQuen)
   .delete(auth(), validate(thoiQuenCoSanValidation.findByIdAndDelete), thoiQuenCoSanController.findByIdAndDelete);
 
