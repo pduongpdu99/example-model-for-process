@@ -8,7 +8,13 @@ const { getPopulate } = require('../utils/common_methods/populate');
  * @returns
  */
 const find = async () => {
-  return User.find();
+  let populuteFields = ['idTinh', 'banBes idTinh'];
+
+  return User.find().populate(
+    populuteFields.map((item) => {
+      return getPopulate(item.trim());
+    })
+  );
 };
 
 /**
@@ -16,7 +22,7 @@ const find = async () => {
  * @returns
  */
 const findUserByNumber = async (numberPhone) => {
-  return User.find({ soDienThoai: numberPhone.toString() }).then(results => {
+  return User.find({ soDienThoai: numberPhone.toString() }).then((results) => {
     if (results.length > 0) {
       return results[0];
     }
@@ -88,14 +94,7 @@ const findById = async (id) => {
  * @returns
  */
 const paginate = async (filter, options) => {
-  let populuteFields = [
-    'idTinh',
-    'idHuyen',
-    'idPartner',
-    'idDanhSachHinhAnh',
-    'banBes idTinh',
-    'banBes idHuyen',
-  ];
+  let populuteFields = ['idTinh', 'idHuyen', 'idPartner', 'idDanhSachHinhAnh', 'banBes idTinh', 'banBes idHuyen'];
 
   // replace id -> _id
   if (filter.id) {
@@ -113,20 +112,25 @@ const paginate = async (filter, options) => {
   let results = await User.find(filter);
   let length = results.length;
   let totalResults = results.length;
-  let totalPages = (length / limit) - parseInt(length / limit) != 0 ? parseInt(length / limit) + 1 : parseInt(length / limit);
+  let totalPages = length / limit - parseInt(length / limit) != 0 ? parseInt(length / limit) + 1 : parseInt(length / limit);
   if (limit >= length) totalPages = 1;
 
-  return User.find(filter).populate(populuteFields.map(item => {
-    return getPopulate(item.trim());
-  })).limit(limit).skip((page - 1) * limit)
-    .then(results => {
+  return User.find(filter)
+    .populate(
+      populuteFields.map((item) => {
+        return getPopulate(item.trim());
+      })
+    )
+    .limit(limit)
+    .skip((page - 1) * limit)
+    .then((results) => {
       return {
         results,
         page,
         limit,
         totalPages,
-        totalResults
-      }
+        totalResults,
+      };
     });
 };
 

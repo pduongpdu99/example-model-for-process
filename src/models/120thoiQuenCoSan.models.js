@@ -9,13 +9,16 @@ const thoiQuenCoSanSchema = mongoose.Schema(
   {
     idDanhMucDeXuat: { type: mongoose.Schema.Types.ObjectId, ref: 'DanhMucDeXuat' },
     idNguoiDung: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    ten: { type: String, required: true, },
-    mota: { type: String, },
-    donVi: { type: mongoose.SchemaTypes.ObjectId, ref: 'NhacChuong', },
+    ten: { type: String, required: true },
+    mota: { type: String },
+    donVi: { type: mongoose.SchemaTypes.ObjectId, ref: 'NhacChuong' },
     nhiemVu: { type: Number },
     ngay: [Number],
     thoiGianNhacNhos: [String],
     loaiThoiQuen: { type: Number },
+    hinhDaiDien: {
+      type: String,
+    },
   },
   {
     timestamps: true,

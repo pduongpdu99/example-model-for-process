@@ -23,6 +23,9 @@ const thoiQuenSchema = mongoose.Schema(
     soNgayLienTuc: { type: Number },
     soNgayLienTucDaiNhat: { type: Number },
     daTao: { type: Boolean, default: false },
+    hinhDaiDien: {
+      type: String,
+    },
   },
   {
     timestamps: true,
