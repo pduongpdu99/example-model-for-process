@@ -21,15 +21,15 @@ const create = catchAsync(async (req, res) => {
 
 /**
  * thêm thành viên vào nhóm
- * @param idNhom id nhóm 
+ * @param idNhom id nhóm
  * @param idThanhVien id thành viên
- * @returns 
+ * @returns
  */
 const themThanhVienVaoNhom = catchAsync(async (req, res) => {
-  let idNhom = req.params.idNhom;
-  let idNguoiDung = req.params.idNguoiDung;
+  const { idNhom } = req.params;
+  const idNguoiDungs = req.body.idNguoiDungs;
 
-  let nhom = await nhomService.themThanhVienVaoNhom(idNhom, idNguoiDung);
+  const nhom = await nhomService.themThanhVienVaoNhom(idNhom, idNguoiDungs);
   res.send(nhom);
 });
 

@@ -14,7 +14,6 @@ router
 
 router.route('/paginate').get(auth(), danhMucDeXuatController.paginate);
 
-
 router
   .route('/:id')
   .get(auth(), danhMucDeXuatController.findById)

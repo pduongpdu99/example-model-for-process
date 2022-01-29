@@ -24,7 +24,6 @@ router.route('/number/:number').get(auth(), userControler.findUserByNumber);
 
 router.route('/active/:idTaiKhoan/:active').put(auth(), userControler.kichHoatTaiKhoan);
 
-
 router
   .route('/dateStart-dateEnd')
   .get(auth(), validate(userValidation.findByDateStartToDateEnd), userControler.findByDateStartToDateEnd);

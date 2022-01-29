@@ -17,7 +17,7 @@ const checkStatus = async (idUser, datetime) => {
     createdAt: { $gte: datepart, $lt: datepart2 },
   });
   // return thoiquen;
-  return thoiquen.filter((item) => item.tienDo == item.nhiemVu);
+  return thoiquen.filter((item) => item.tienDo === item.nhiemVu);
 };
 
 module.exports = {

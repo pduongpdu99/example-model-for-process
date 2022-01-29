@@ -6,9 +6,9 @@ const { checkStatusService } = require('../services');
  * checkStatus
  */
 const checkStatus = catchAsync(async (req, res) => {
-  const timestamp = req.params.timestamp;
+  const { timestamp } = req.params;
 
-  let datetime = new Date(parseInt(timestamp.toString())).toISOString();
+  const datetime = new Date(parseInt(timestamp.toString(), 10)).toISOString();
 
   const status = await checkStatusService.checkStatus(req.params.id, datetime);
   res.status(httpStatus.CREATED).send(status);

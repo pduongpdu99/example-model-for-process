@@ -14,7 +14,7 @@ router
 
 router.route('/paginate').get(auth(), nhomController.paginate);
 
-router.route('/addmember/:idNhom/:idNguoiDung').post(auth(), nhomController.themThanhVienVaoNhom);
+router.route('/addmember/:idNhom').post(auth(), nhomController.themThanhVienVaoNhom);
 
 router
   .route('/:id')

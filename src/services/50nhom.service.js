@@ -1,6 +1,7 @@
 /* eslint-disable */
 const httpStatus = require('http-status');
 const { Nhom, User } = require('../models');
+const { userService } = require('./index');
 const ApiError = require('../utils/ApiError');
 const { getPopulate } = require('../utils/common_methods/populate');
 
@@ -26,17 +27,43 @@ const create = async (body) => {
  * @param {*} body
  * @returns
  */
-const themThanhVienVaoNhom = async (idNhom, idNguoiDung) => {
-  return User.findById(idNguoiDung.toString()).then(user => {
-    let nhomsOfUser = user.idNhoms.map(item => item.toString());
-    console.log(user, nhomsOfUser);
-    if (!nhomsOfUser.includes(idNhom.toString())) {
-      user.idNhoms.push(idNhom);
+const themThanhVienVaoNhom = async (idNhom, idNguoiDungs) => {
+  return User.find({
+    '_id': {
+      $in: idNguoiDungs
+    }
+  }).then(async users => {
+    let results = [];
+    for (const user of users) {
+      if (!user.idNhoms.includes(idNhom)) {
+        user.idNhoms.push(idNhom);
+      }
+      await User.findOneAndUpdate({ _id: user.id }, { $set: { idNhoms: user.idNhoms } }, {});
+      results.push(user);
     }
 
-    return User.updateOne({ _id: idNguoiDung, idNhoms: user.idNhoms }).then(user => user).catch(error => error);
+    return results;
   });
-};
+}
+
+
+// /**
+//  * thêm danh sách thành viên
+//  * @param {*} body
+//  * @returns
+//  */
+// const themThanhVienVaoNhom = async (idNhom, idNguoiDungs) => {
+//   return User.findById(idNguoiDung.toString()).then((user) => {
+//     let nhomsOfUser = user.idNhoms.map((item) => item.toString());
+//     if (!nhomsOfUser.includes(idNhom.toString())) {
+//       user.idNhoms.push(idNhom);
+//     }
+
+//     return User.updateOne({ _id: idNguoiDung, idNhoms: user.idNhoms })
+//       .then((user) => user)
+//       .catch((error) => error);
+//   });
+// };
 
 /**
  * Update nhom by id
@@ -102,20 +129,24 @@ const paginate = async (filter, options) => {
   options.limit = parseInt(options.limit, 10);
   options.page = parseInt(options.page, 10);
 
-  return Nhom.find(filter).populate(populuteFields.map(item => {
-    return getPopulate(item.trim());
-  }))
+  return Nhom.find(filter)
+    .populate(
+      populuteFields.map((item) => {
+        return getPopulate(item.trim());
+      })
+    )
     .limit(options.limit)
     .skip((options.page - 1) * options.limit)
-    .then(results => {
+    .then((results) => {
       return {
-        "results": results,
-        "page": options.page,
-        "limit": options.limit,
-        "totalPages": options.page + results.length % options.page === 0 ? 0 : 1,
-        "totalResults": results.length
-      }
-    }).catch(error => console.log(error))
+        results: results,
+        page: options.page,
+        limit: options.limit,
+        totalPages: options.page + (results.length % options.page) === 0 ? 0 : 1,
+        totalResults: results.length,
+      };
+    })
+    .catch((error) => console.log(error));
 };
 
 module.exports = {
@@ -130,3 +161,5 @@ module.exports = {
   // additional
   themThanhVienVaoNhom,
 };
+
+// thêm danh sách thành viên cho một nhóm

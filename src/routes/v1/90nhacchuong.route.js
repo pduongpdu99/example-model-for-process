@@ -1,20 +1,20 @@
 const express = require('express');
+const multer = require('multer');
 const { nhacChuongController } = require('../../controllers');
 const { nhacChuongValidation } = require('../../validations');
 const auth = require('../../middlewares/auth');
-const multer = require('multer');
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination(req, file, cb) {
     cb(null, 'src/public/audio/');
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + file.originalname);
+  filename(req, file, cb) {
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `${file.fieldname}-${uniqueSuffix}${file.originalname}`);
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 const router = express.Router();
 const validate = require('../../middlewares/validate');

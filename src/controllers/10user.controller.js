@@ -17,8 +17,8 @@ const find = catchAsync(async (req, res) => {
  * @returns
  */
 const kichHoatTaiKhoan = catchAsync(async (req, res) => {
-  let idTaiKhoan = req.params.idTaiKhoan.toString();
-  let isActive = req.params.active.toString() === 'true';
+  const idTaiKhoan = req.params.idTaiKhoan.toString();
+  const isActive = req.params.active.toString() === 'true';
 
   const result = await userService.kichHoatTaiKhoan(idTaiKhoan, isActive);
   res.send(result);
@@ -28,7 +28,7 @@ const kichHoatTaiKhoan = catchAsync(async (req, res) => {
  * Tìm kiếm người dùng theo số điện thoại
  */
 const findUserByNumber = catchAsync(async (req, res) => {
-  let number = req.params.number;
+  const { number } = req.params;
   const account = await userService.findUserByNumber(number);
   res.send(account);
 });

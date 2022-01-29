@@ -15,10 +15,10 @@ const find = catchAsync(async (req, res) => {
  * load thói quen theo ngày
  */
 const loadHabitsByTimestamp = catchAsync(async (req, res) => {
-  const timestamp = req.params.timestamp;
+  const { timestamp } = req.params;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
 
-  let datetime = new Date(parseInt(timestamp.toString())).toISOString();
+  const datetime = new Date(parseInt(timestamp.toString(), 10)).toISOString();
 
   const result = await thoiQuenService.loadHabitsByTimestamp(datetime, options);
   res.send(result);
@@ -28,7 +28,7 @@ const loadHabitsByTimestamp = catchAsync(async (req, res) => {
  * load thói quen theo người dùng
  */
 const loadHabitsByidNguoiDung = catchAsync(async (req, res) => {
-  const idNguoiDung = req.params.idNguoiDung;
+  const { idNguoiDung } = req.params;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
 
   const result = await thoiQuenService.loadHabitsByidNguoiDung(idNguoiDung, options);

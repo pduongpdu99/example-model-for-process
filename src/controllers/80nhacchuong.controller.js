@@ -16,10 +16,9 @@ const find = catchAsync(async (req, res) => {
  * uploadFile
  */
 const uploadFile = catchAsync(async (req, res) => {
-  if (req.file != undefined) {
+  if (req.file !== undefined) {
     req.body.baiNhac = req.file.filename;
   }
-  console.log(req.body);
 
   await NhacChuong.create(req.body);
   res.status(200).send('success');

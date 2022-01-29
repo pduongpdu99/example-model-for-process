@@ -23,7 +23,7 @@ const loadLichSuThoiQuen = catchAsync(async (req, res) => {
  * thông kê cột
  */
 const thongKeCot = catchAsync(async (req, res) => {
-  let idTaiKhoan = req.params.idTaiKhoan;
+  const { idTaiKhoan } = req.params;
 
   // scope là argument alias cho ngày, tuần, tháng
   // 1 - load danh sách thói quen theo năm của tài khoản hiện tại
@@ -32,7 +32,7 @@ const thongKeCot = catchAsync(async (req, res) => {
   // 4 - load danh sách thói quen các ngày trong tuần của tài khoản hiện tại.
   // 5 - load danh sách thói quen hôm nay của tài khoản hiện tại.
   // 6 - load danh sách thói quen tháng này của tài khoản hiện tại.
-  let scope = req.params.scope;
+  const { scope } = req.params;
 
   const result = await diemTichLuyService.thongKeCot(idTaiKhoan, scope);
   res.send(result);
@@ -42,8 +42,8 @@ const thongKeCot = catchAsync(async (req, res) => {
  * Liệt kê dữ liệu theo người dùng và ngày được chỉ định
  */
 const thongKeTheoNgay = catchAsync(async (req, res) => {
-  let idTaiKhoan = req.params.idTaiKhoan;
-  let date = new Date(req.params.timestamp).toISOString().split("T")[0];
+  const { idTaiKhoan } = req.params;
+  const date = new Date(req.params.timestamp).toISOString().split('T')[0];
 
   const result = await diemTichLuyService.thongKeTheoNgay(idTaiKhoan, date);
   res.send(result);
@@ -121,8 +121,8 @@ const paginate = catchAsync(async (req, res) => {
  * paginate
  */
 const loadDiemNguoiDungTheoThang = catchAsync(async (req, res) => {
-  const idTinh = req.params.idTinh;
-  const month = req.params.month;
+  const { idTinh } = req.params;
+  const { month } = req.params;
 
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await diemTichLuyService.loadDiemNguoiDungTheoThang(idTinh, month, options);
@@ -142,5 +142,5 @@ module.exports = {
   loadLichSuThoiQuen,
   thongKeCot,
   thongKeTheoNgay,
-  loadDiemNguoiDungTheoThang
+  loadDiemNguoiDungTheoThang,
 };
